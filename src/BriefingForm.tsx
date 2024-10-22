@@ -1,67 +1,67 @@
-import React, { useState } from 'react'
-import { useForm } from '@formspree/react'
+import React, { useState } from 'react';
+import { useForm } from '@formspree/react';
 
 export default function BriefingForm() {
-  const [state, handleSubmit] = useForm(process.env.REACT_APP_FORMSPREE_ID || "")
-  const [colorPickers, setColorPickers] = useState([{ color: '#000000', name: '' }])
-  const [references, setReferences] = useState([{ url: '', description: '' }])
-  const [sections, setSections] = useState([''])
-  const [timelines, setTimelines] = useState([''])
-  const [functionalities, setFunctionalities] = useState([''])
+  const [state, handleSubmit] = useForm(process.env.REACT_APP_FORMSPREE_ID || "");
+  const [colorPickers, setColorPickers] = useState([{ color: '#000000', name: '' }]);
+  const [references, setReferences] = useState([{ url: '', description: '' }]);
+  const [sections, setSections] = useState(['']);
+  const [timelines, setTimelines] = useState(['']);
+  const [functionalities, setFunctionalities] = useState(['']);
 
   const addColorPicker = () => {
-    setColorPickers([...colorPickers, { color: '#000000', name: '' }])
-  }
+    setColorPickers([...colorPickers, { color: '#000000', name: '' }]);
+  };
 
-  const updateColorPicker = (index, field, value) => {
-    const newColorPickers = [...colorPickers]
-    newColorPickers[index][field] = value
-    setColorPickers(newColorPickers)
-  }
+  const updateColorPicker = (index: number, field: keyof typeof colorPickers[number], value: string) => {
+    const newColorPickers = [...colorPickers];
+    newColorPickers[index][field] = value;
+    setColorPickers(newColorPickers);
+  };
 
-  const removeColorPicker = (index) => {
-    setColorPickers(colorPickers.filter((_, i) => i !== index))
-  }
+  const removeColorPicker = (index: number) => {
+    setColorPickers(colorPickers.filter((_, i) => i !== index));
+  };
 
   const addReference = () => {
-    setReferences([...references, { url: '', description: '' }])
-  }
+    setReferences([...references, { url: '', description: '' }]);
+  };
 
-  const updateReference = (index, field, value) => {
-    const newReferences = [...references]
-    newReferences[index][field] = value
-    setReferences(newReferences)
-  }
+  const updateReference = (index: number, field: keyof typeof references[number], value: string) => {
+    const newReferences = [...references];
+    newReferences[index][field] = value;
+    setReferences(newReferences);
+  };
 
-  const removeReference = (index) => {
-    setReferences(references.filter((_, i) => i !== index))
-  }
+  const removeReference = (index: number) => {
+    setReferences(references.filter((_, i) => i !== index));
+  };
 
-  const addItem = (setter) => {
-    setter(prev => [...prev, ''])
-  }
+  const addItem = (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setter(prev => [...prev, '']);
+  };
 
-  const updateItem = (setter, index, value) => {
+  const updateItem = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
     setter(prev => {
-      const newItems = [...prev]
-      newItems[index] = value
-      return newItems
-    })
-  }
+      const newItems = [...prev];
+      newItems[index] = value;
+      return newItems;
+    });
+  };
 
-  const removeItem = (setter, index) => {
-    setter(prev => prev.filter((_, i) => i !== index))
-  }
+  const removeItem = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number) => {
+    setter(prev => prev.filter((_, i) => i !== index));
+  };
 
   if (state.succeeded) {
-    return <p>¡Gracias por enviar tu briefing!</p>
+    return <p>¡Gracias por enviar tu briefing!</p>;
   }
 
   return (
     <div className="container">
       <h1>Briefing de Rediseño Web</h1>
       <p className="intro-text">Complete este formulario para ayudarnos a entender mejor sus necesidades de rediseño web.</p>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="section-title">Información de contacto</div>
         <div className="grid">
@@ -118,7 +118,7 @@ export default function BriefingForm() {
                 value={picker.color}
                 onChange={(e) => updateColorPicker(index, 'color', e.target.value)}
               />
-              <div className="color-preview" style={{backgroundColor: picker.color}}></div>
+              <div className="color-preview" style={{ backgroundColor: picker.color }}></div>
               <input
                 type="text"
                 placeholder="Nombre/descripción del color"
@@ -196,5 +196,5 @@ export default function BriefingForm() {
         </button>
       </form>
     </div>
-  )
+  );
 }
