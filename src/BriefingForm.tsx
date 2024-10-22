@@ -54,6 +54,32 @@ export default function BriefingForm() {
     setter(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    // Crear un objeto FormData con todos los campos del formulario
+    const formData = new FormData(e.currentTarget);
+    
+    // Añadir los campos dinámicos como JSON strings
+    formData.append('colorPickers', JSON.stringify(colorPickers.filter(cp => cp.color !== '#000000' || cp.name !== '')));
+    formData.append('references', JSON.stringify(references.filter(ref => ref.url !== '' || ref.description !== '')));
+    formData.append('sections', JSON.stringify(sections.filter(section => section !== '')));
+    formData.append('timelines', JSON.stringify(timelines.filter(timeline => timeline !== '')));
+    formData.append('functionalities', JSON.stringify(functionalities.filter(functionality => functionality !== '')));
+
+    // Convertir FormData a un objeto para Formspree
+    const formObject: any = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+
+    // Log para debugging
+    console.log('Sending data:', formObject);
+
+    // Enviar usando la función handleSubmit de Formspree
+    handleSubmit(e);
+  };
+
   if (state.succeeded) {
     return <p>¡Gracias por enviar tu briefing!</p>;
   }
@@ -63,7 +89,7 @@ export default function BriefingForm() {
       <h1>Briefing de Rediseño Web</h1>
       <p className="intro-text">Complete este formulario para ayudarnos a entender mejor sus necesidades de rediseño web.</p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <div className="section-title">Información de contacto</div>
         <div className="grid">
           <div className="form-group">
@@ -138,6 +164,7 @@ export default function BriefingForm() {
             <div key={index} className="reference-item">
               <input
                 type="text"
+                name={`section-${index}`}
                 placeholder="Nombre de la sección"
                 value={section}
                 onChange={(e) => updateItem(setSections, index, e.target.value)}
@@ -154,6 +181,7 @@ export default function BriefingForm() {
             <div key={index} className="reference-item">
               <input
                 type="text"
+                name={`timeline-${index}`}
                 placeholder="Descripción del plazo"
                 value={timeline}
                 onChange={(e) => updateItem(setTimelines, index, e.target.value)}
@@ -170,6 +198,7 @@ export default function BriefingForm() {
             <div key={index} className="reference-item">
               <input
                 type="text"
+                name={`functionality-${index}`}
                 placeholder="Descripción de la funcionalidad"
                 value={functionality}
                 onChange={(e) => updateItem(setFunctionalities, index, e.target.value)}
