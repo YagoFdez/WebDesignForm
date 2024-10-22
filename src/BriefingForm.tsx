@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useForm } from '@formspree/react'
 
 export default function BriefingForm() {
-  const [state, handleSubmit] = useForm("YOUR_FORMSPREE_FORM_ID")
+  const [state, handleSubmit] = useForm(process.env.REACT_APP_FORMSPREE_ID || "")
   const [colorPickers, setColorPickers] = useState([{ color: '#000000', name: '' }])
   const [references, setReferences] = useState([{ url: '', description: '' }])
   const [sections, setSections] = useState([''])
