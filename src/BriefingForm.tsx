@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from '@formspree/react';
+import './briefing-form.css'
 
 export default function BriefingForm() {
   const [state, handleSubmit] = useForm(process.env.REACT_APP_FORMSPREE_ID || "");
