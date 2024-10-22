@@ -53,7 +53,8 @@ public
 .idea/
 *.sublime-project
 *.sublime-workspace
-
+.packa
 # macOS files
 Thumbs.db
 *.DS_Store
+package-lock.json
