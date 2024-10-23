@@ -57,28 +57,36 @@ export default function BriefingForm() {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Crear un objeto FormData con todos los campos del formulario
-    const formData = new FormData(e.currentTarget);
+    // Añadir los campos dinámicos al formulario antes de enviarlo
+    const form = e.currentTarget;
     
-    // Añadir los campos dinámicos como JSON strings
-    formData.append('colorPickers', JSON.stringify(colorPickers.filter(cp => cp.color !== '#000000' || cp.name !== '')));
-    formData.append('references', JSON.stringify(references.filter(ref => ref.url !== '' || ref.description !== '')));
-    formData.append('sections', JSON.stringify(sections.filter(section => section !== '')));
-    formData.append('timelines', JSON.stringify(timelines.filter(timeline => timeline !== '')));
-    formData.append('functionalities', JSON.stringify(functionalities.filter(functionality => functionality !== '')));
+    // Añadir campos dinámicos como inputs hidden
+    const addHiddenInput = (name: string, value: string) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    };
 
-    // Convertir FormData a un objeto para Formspree
-    const formObject: any = {};
-    formData.forEach((value, key) => {
-      formObject[key] = value;
-    });
+    // Añadir todos los campos dinámicos
+    addHiddenInput('colorPickers', JSON.stringify(colorPickers.filter(cp => cp.color !== '#000000' || cp.name !== '')));
+    addHiddenInput('references', JSON.stringify(references.filter(ref => ref.url !== '' || ref.description !== '')));
+    addHiddenInput('sections', JSON.stringify(sections.filter(section => section !== '')));
+    addHiddenInput('timelines', JSON.stringify(timelines.filter(timeline => timeline !== '')));
+    addHiddenInput('functionalities', JSON.stringify(functionalities.filter(functionality => functionality !== '')));
 
     // Log para debugging
-    console.log('Sending data:', formObject);
+    console.log('Sending data:', Object.fromEntries(new FormData(form)));
 
-    // Enviar usando la función handleSubmit de Formspree
+    // Enviar el formulario
     handleSubmit(e);
-  };
+
+    // Limpiar los inputs hidden después del envío
+    setTimeout(() => {
+        form.querySelectorAll('input[type="hidden"]').forEach(el => el.remove());
+    }, 100);
+};
 
   if (state.succeeded) {
     return <p>¡Gracias por enviar tu briefing!</p>;
